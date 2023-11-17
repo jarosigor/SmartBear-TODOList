@@ -29,13 +29,17 @@ const TaskList = ({ calendarValue }) => {
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [openDialog, setOpenDialog] = useState(false);
   const [newTaskName, setNewTaskName] = useState("");
-  const [newTaskDate, setNewTaskDate] = useState(dayjs());
+  const [newTaskDate, setNewTaskDate] = useState(calendarValue);
 
   const taskService = new TaskService();
 
   useEffect(() => {
     fetchTasks();
   }, []);
+
+  useEffect(() => {
+    setNewTaskDate(calendarValue);
+  }, [calendarValue]);
 
   const fetchTasks = () => {
     taskService
@@ -335,6 +339,7 @@ const TaskList = ({ calendarValue }) => {
             </FormControl>
             <DateTimePicker
               label="Task Date"
+              defaultValue={calendarValue}
               value={newTaskDate}
               onChange={(date) => setNewTaskDate(date)}
               style={{ marginBottom: "16px", width: "80%" }}
