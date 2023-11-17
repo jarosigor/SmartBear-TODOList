@@ -1,7 +1,13 @@
 package com.smartbear.todo.DTO;
 
-import com.smartbear.todo.entity.User;
-import org.springframework.web.bind.annotation.RequestBody;
+import lombok.Data;
 
-public class UserMapper {
+@Data
+public class UserDTO {
+    private Long id;
+    private String username;
+    private String password;
+    private String firstName;
+    private String lastName;
+    private String email;
 }

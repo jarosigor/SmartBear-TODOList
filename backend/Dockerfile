@@ -1,4 +1,5 @@
-FROM ubuntu:latest
-LABEL authors="igor.jarosz"
+FROM openjdk:21-oracle
+EXPOSE 8080
+ADD target/app.jar app.jar
 
-ENTRYPOINT ["top", "-b"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

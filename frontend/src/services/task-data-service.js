@@ -7,7 +7,6 @@ class TaskService {
   }
 
   addTask(task) {
-    console.log("task: " + task);
     return this.axiosIn.post(`/add-task`, task);
   }
 
@@ -36,7 +35,6 @@ class TaskService {
   }
 
   updateTask(task) {
-    console.log(task);
     return this.axiosIn.put(`/update-task`, task);
   }
 }

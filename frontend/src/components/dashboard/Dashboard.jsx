@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -71,12 +71,16 @@ const Drawer = styled(MuiDrawer, {
 const defaultTheme = createTheme();
 
 export default function Dashboard() {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
-  const [calendarValue, setCalendarValue] = React.useState(dayjs());
+  const [allTasksDoneCount, setAllTasksDoneCount] = useState();
+  const [allTasksCount, setAllTasksCount] = useState();
+  const [dayTasksDoneCount, setDayTasksDoneCount] = useState();
+  const [dayTasksCount, setDayTasksCount] = useState();
+  const [calendarValue, setCalendarValue] = useState(dayjs());
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

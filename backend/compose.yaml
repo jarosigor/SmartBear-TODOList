@@ -1,0 +1,39 @@
+services:
+  # PostgreSQL container
+  postgres:
+    image: postgres:latest
+    restart: always
+    container_name: postgres
+    environment:
+      POSTGRES_DB: todo_db
+      POSTGRES_USER: igor
+      POSTGRES_PASSWORD: jarosz
+    ports:
+      - "5432:5432"
+
+  # Spring Boot container
+  backend:
+    build: ./
+    container_name: backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/todo_db
+      SPRING_DATASOURCE_USERNAME: igor
+      SPRING_DATASOURCE_PASSWORD: jarosz
+
+  # React container
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRONTEND: frontend
+    container_name: my-react-app
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    depends_on:
+      - backend

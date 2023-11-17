@@ -4,12 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "todo")
 public class Task {
@@ -26,8 +25,11 @@ public class Task {
     private String description = "";
 
     @DateTimeFormat
-    @Column(name = "due_date", nullable = false)
-    private LocalDate dueDate;
+    @Column(name = "due_date")
+    private Date dueDate;
+
+    @Column(name = "priority")
+    private String priority;
 
     @Column(name = "completed")
     private boolean completed;

@@ -42,7 +42,7 @@ const TaskList = ({ calendarValue }) => {
       .getTasks()
       .then((response) => {
         setTasks(response.data);
-        console.log("Getting tasks successful");
+        console.log("Getting tasks successful", response.data);
       })
       .catch((error) => {
         console.error("Failed getting tasks", error);
@@ -75,8 +75,8 @@ const TaskList = ({ calendarValue }) => {
 
   const formatDate = (date) => {
     const { $d: finalDate } = date;
-    const parsedDate = dayjs(finalDate); // Parse the string into a Day.js object
-    return parsedDate.toISOString(); // Format as desired
+    const parsedDate = dayjs(finalDate);
+    return parsedDate.toISOString();
   };
 
   const handleOpenDialog = () => {
@@ -87,37 +87,56 @@ const TaskList = ({ calendarValue }) => {
     setOpenDialog(false);
   };
 
-  const handleCompletionToggle = (taskId) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId ? { ...task, completed: !task.completed } : task
-      )
-    );
+  const handleUpdateCompletion = (task) => {
+    if (task) {
+      task.completed = !task.completed;
 
-    const taskToUpdate = tasks.find((task) => task.id === taskId);
-    if (taskToUpdate) {
       taskService
-        .updateTask(taskToUpdate)
+        .updateTask(task)
         .then((response) => {
-          console.log("Updating data successful", response.data);
+          console.log("Updating task completion successful", response.data);
+          const alteredTask = tasks.map((item) =>
+            item.id === response.data.id ? response.data : item
+          );
+          setTasks(alteredTask);
         })
         .catch((error) => {
-          console.log("Failed updating task", error);
+          console.error("Failed updating task completion", error);
         });
+    } else {
+      console.error("Error with task passed to task completion update");
     }
   };
 
   const handleUpdateTaskDate = (task, date) => {
-    task.dueDate = date;
+    if (task) {
+      task.dueDate = date;
 
-    taskService
-      .updateTask(task)
-      .then((response) => {
-        console.log("Updated task date: " + task.title);
-      })
-      .catch((error) => {
-        console.error("Task date update failed: ", error);
-      });
+      taskService
+        .updateTask(task)
+        .then((response) => {
+          console.log("Updated task date", response.data);
+        })
+        .catch((error) => {
+          console.error("Failed updating task date", error);
+        });
+    }
+  };
+
+  const handleUpdatePriority = (task, priority) => {
+    if (task) {
+      task.priority = priority;
+      taskService
+        .updateTask(task)
+        .then((response) => {
+          console.log("Updated task priority", response.data);
+        })
+        .catch((error) => {
+          console.error("Failed updating task priority", error);
+        });
+    } else {
+      console.error("Error with task passed to task priority update");
+    }
   };
 
   const handleAddTask = () => {
@@ -146,26 +165,18 @@ const TaskList = ({ calendarValue }) => {
     handleCloseDialog();
   };
 
-  const handleRemoveTask = (taskId) => {
-    const newList = tasks.filter((item) => item.id !== taskId);
+  const handleRemoveTask = (task) => {
+    const newList = tasks.filter((item) => item.id !== task.id);
     setTasks(newList);
 
     taskService
-      .deleteTaskById(taskId)
+      .deleteTaskById(task.id)
       .then((response) => {
         console.log("Task deleted successfully", response.data);
       })
       .catch((error) => {
-        console.error("Error deleting task", error);
+        console.error("Failed task deletion", error);
       });
-  };
-
-  const handlePriorityChange = (taskId, priority) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId ? { ...task, priority } : task
-      )
-    );
   };
 
   return (
@@ -212,8 +223,9 @@ const TaskList = ({ calendarValue }) => {
                 }}
               >
                 <Checkbox
+                  label="defaultChecked"
                   checked={task.completed}
-                  onChange={() => handleCompletionToggle(task.id)}
+                  onChange={() => handleUpdateCompletion(task)}
                   style={{ marginRight: "16px" }}
                 />
                 <ListItemText
@@ -236,9 +248,7 @@ const TaskList = ({ calendarValue }) => {
                   <Select
                     value={task.priority}
                     label={`Priority ${task.id}`}
-                    onChange={(e) =>
-                      handlePriorityChange(task.id, e.target.value)
-                    }
+                    onChange={(e) => handleUpdatePriority(task, e.target.value)}
                   >
                     <MenuItem value="Low">Low</MenuItem>
                     <MenuItem value="Medium">Medium</MenuItem>
@@ -247,7 +257,7 @@ const TaskList = ({ calendarValue }) => {
                 </FormControl>
                 <Button
                   onClick={() => {
-                    handleRemoveTask(task.id);
+                    handleRemoveTask(task);
                   }}
                   variant="outlined"
                   style={{ marginLeft: "8px" }}
@@ -265,7 +275,6 @@ const TaskList = ({ calendarValue }) => {
           color="primary"
           onClick={() => {
             handleOpenDialog();
-            console.log("add button click");
           }}
           style={{ marginTop: "auto" }}
         >
@@ -336,7 +345,6 @@ const TaskList = ({ calendarValue }) => {
                 color="primary"
                 onClick={() => {
                   handleAddTask();
-                  console.log("adding task");
                 }}
                 fullWidth
               >
