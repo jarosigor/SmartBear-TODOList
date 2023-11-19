@@ -1,11 +1,9 @@
-package com.smartbear.todo.controller;
+package com.smartbear.todo.controller.user;
 
-import com.smartbear.todo.DTO.UserDTO;
-import com.smartbear.todo.entity.User;
-import com.smartbear.todo.service.UserService;
+import com.smartbear.todo.DTO.user.UserDTO;
+import com.smartbear.todo.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

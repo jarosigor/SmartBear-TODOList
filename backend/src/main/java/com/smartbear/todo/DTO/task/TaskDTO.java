@@ -1,4 +1,4 @@
-package com.smartbear.todo.DTO;
+package com.smartbear.todo.DTO.task;
 
 import lombok.Data;
 import java.util.Date;

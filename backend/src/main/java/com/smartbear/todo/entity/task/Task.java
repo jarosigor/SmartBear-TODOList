@@ -1,5 +1,6 @@
-package com.smartbear.todo.entity;
+package com.smartbear.todo.entity.task;
 
+import com.smartbear.todo.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;

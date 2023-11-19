@@ -1,7 +1,8 @@
 package com.smartbear.todo.service;
 
-import com.smartbear.todo.entity.Task;
-import com.smartbear.todo.repository.TaskRepository;
+import com.smartbear.todo.entity.task.Task;
+import com.smartbear.todo.repository.task.TaskRepository;
+import com.smartbear.todo.service.task.TaskService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.extension.ExtendWith;

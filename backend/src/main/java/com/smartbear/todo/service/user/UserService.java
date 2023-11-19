@@ -1,13 +1,12 @@
-package com.smartbear.todo.service;
+package com.smartbear.todo.service.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.smartbear.todo.DTO.UserDTO;
-import com.smartbear.todo.entity.User;
-import com.smartbear.todo.repository.UserRepository;
+import com.smartbear.todo.DTO.user.UserDTO;
+import com.smartbear.todo.entity.user.User;
+import com.smartbear.todo.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,7 @@ public class UserService {
     }
 
     public UserDTO getUserByEmail(String email) {
-        return convertEntityToDto(repository.findByEmail(email));
+        return convertEntityToDto(repository.findByEmail(email).orElse(null));
     }
 
     public List<UserDTO> getUsers() {
@@ -59,8 +58,8 @@ public class UserService {
             return null;
         }
 
-        existingUser.setFirstName(userDTO.getFirstName());
-        existingUser.setLastName(userDTO.getLastName());
+        existingUser.setFirstname(userDTO.getFirstname());
+        existingUser.setLastname(userDTO.getLastname());
 
         return convertEntityToDto(existingUser);
     }

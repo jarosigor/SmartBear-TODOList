@@ -1,11 +1,9 @@
-package com.smartbear.todo.service;
+package com.smartbear.todo.service.task;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.smartbear.todo.DTO.TaskDTO;
-import com.smartbear.todo.DTO.UserDTO;
-import com.smartbear.todo.entity.Task;
-import com.smartbear.todo.entity.User;
-import com.smartbear.todo.repository.TaskRepository;
+import com.smartbear.todo.DTO.task.TaskDTO;
+import com.smartbear.todo.entity.task.Task;
+import com.smartbear.todo.repository.task.TaskRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service

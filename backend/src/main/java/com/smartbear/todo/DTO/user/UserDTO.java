@@ -1,4 +1,4 @@
-package com.smartbear.todo.DTO;
+package com.smartbear.todo.DTO.user;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ public class UserDTO {
     private Long id;
     private String username;
     private String password;
-    private String firstName;
-    private String lastName;
+    private String firstname;
+    private String lastname;
     private String email;
 }

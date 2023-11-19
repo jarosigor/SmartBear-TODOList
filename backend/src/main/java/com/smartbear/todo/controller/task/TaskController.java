@@ -1,8 +1,7 @@
-package com.smartbear.todo.controller;
+package com.smartbear.todo.controller.task;
 
-import com.smartbear.todo.DTO.TaskDTO;
-import com.smartbear.todo.entity.Task;
-import com.smartbear.todo.service.TaskService;
+import com.smartbear.todo.DTO.task.TaskDTO;
+import com.smartbear.todo.service.task.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
