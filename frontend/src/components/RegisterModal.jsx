@@ -7,26 +7,60 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import createAuthService from "../services/AuthService";
 
-const RegisterModal = ({ onRegister, onClose }) => {
-  const [username, setUsername] = useState("");
+const RegisterModal = ({ setIsLoggedIn }) => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [open, setOpen] = useState(true);
+
+  const navigate = useNavigate();
 
   const handleRegister = () => {
-    onRegister(username, password);
+    const newUser = {
+      email: email,
+      password: password,
+      firstname: firstname,
+      lastname: lastname,
+      role: "USER",
+    };
+
+    const authService = createAuthService();
+
+    authService
+      .registerUser(newUser)
+      .then((response) => {
+        console.log("User registered successfully:", response.data);
+        const jwtToken = response.data["token"];
+        const userId = response.data["userId"];
+        localStorage.setItem("jwtToken", jwtToken);
+        localStorage.setItem("userId", userId);
+        setIsLoggedIn(true);
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.error("Error registering user:", error);
+      });
+  };
+
+  const handleClose = () => {
+    navigate("/dashboard");
   };
 
   return (
-    <Dialog open={true} onClose={onClose}>
+    <Dialog open={open} onClose={() => handleClose()}>
       <DialogTitle>RegisterModal</DialogTitle>
       <DialogContent>
         <TextField
-          label="Username"
+          label="Email"
           variant="outlined"
           fullWidth
           margin="normal"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
           label="Password"
@@ -37,13 +71,31 @@ const RegisterModal = ({ onRegister, onClose }) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <TextField
+          label="Firstname"
+          type="firstname"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={firstname}
+          onChange={(e) => setFirstname(e.target.value)}
+        />
+        <TextField
+          label="Lastname"
+          type="lastname"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={lastname}
+          onChange={(e) => setLastname(e.target.value)}
+        />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
+        <Button onClick={() => handleClose()} color="secondary">
           Cancel
         </Button>
-        <Button onClick={handleRegister} color="primary">
-          RegisterModal
+        <Button onClick={() => handleRegister()} color="primary">
+          Register
         </Button>
       </DialogActions>
     </Dialog>

@@ -20,10 +20,10 @@ public class UserController {
     }
 
     @PostMapping("/add-user")
-    public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO user) {
+    public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(service.saveUser(user));
+                .body(service.saveUser(userDTO));
     }
 
     @GetMapping("/get-user/{id}")
@@ -55,9 +55,9 @@ public class UserController {
     }
 
     @PutMapping("/update-user")
-    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO user) {
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(service.updateUser(user));
+                .body(service.updateUser(userDTO));
     }
 }

@@ -3,6 +3,7 @@ package com.smartbear.todo.entity.task;
 import com.smartbear.todo.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -21,9 +22,6 @@ public class Task {
 
     @Column(name = "title", nullable = false)
     private String title;
-
-    @Column(name = "description")
-    private String description = "";
 
     @DateTimeFormat
     @Column(name = "due_date")

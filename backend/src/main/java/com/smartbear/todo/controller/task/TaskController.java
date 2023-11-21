@@ -42,14 +42,14 @@ public class TaskController {
                 .body(service.getTasks());
     }
 
-    @GetMapping("/task/{id}")
+    @GetMapping("/task-by-id/{id}")
     public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.getTaskById(id));
     }
 
-    @GetMapping("/tasks/{date}")
+    @GetMapping("/tasks-by-date/{date}")
     public ResponseEntity<List<TaskDTO>> getTasksByDate(@PathVariable LocalDate date) {
         return ResponseEntity
                 .status(HttpStatus.OK)

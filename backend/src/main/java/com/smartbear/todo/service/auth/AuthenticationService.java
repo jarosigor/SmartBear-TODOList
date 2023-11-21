@@ -1,11 +1,10 @@
 package com.smartbear.todo.service.auth;
 
+import com.smartbear.todo.DTO.user.UserDTO;
 import com.smartbear.todo.entity.user.User;
 import com.smartbear.todo.repository.user.UserRepository;
 import com.smartbear.todo.service.jwt.JwtService;
-import com.smartbear.todo.util.auth.AuthenticationRequest;
 import com.smartbear.todo.util.auth.AuthenticationResponse;
-import com.smartbear.todo.util.auth.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,36 +19,39 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(UserDTO userDTO) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
+                        userDTO.getEmail(),
+                        userDTO.getPassword()
                 )
         );
 
-        var user = repository.findByEmail(request.getEmail())
+        var user = repository.findByEmail(userDTO.getEmail())
                 .orElseThrow();
 
         var jwtToken = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .userId(user.getId())
                 .build();
     }
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(UserDTO userDTO) {
         var user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .firstname(userDTO.getFirstname())
+                .lastname(userDTO.getLastname())
+                .email(userDTO.getEmail())
+                .password(passwordEncoder.encode(userDTO.getPassword()))
+                .role(userDTO.getRole())
                 .build();
 
-        repository.save(user);
+        var userEntity = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .userId(userEntity.getId())
                 .build();
     }
 }

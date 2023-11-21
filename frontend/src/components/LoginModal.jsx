@@ -8,21 +8,49 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import createAuthService from "../services/AuthService";
 
-const LoginModal = ({ open, onLogin, onClose }) => {
+const LoginModal = ({ setIsLoggedIn }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
+  const [open, setOpen] = useState(true);
+
+  const navigate = useNavigate();
+
+  const handleClose = () => {
+    navigate("/dashboard");
+  };
 
   const handleLogin = () => {
-    // Implement your login logic
-    onLogin(email, password, firstname, lastname);
+    const user = {
+      email: email,
+      password: password,
+    };
+
+    const authService = createAuthService();
+
+    authService
+      .loginUser(user)
+      .then((response) => {
+        console.log("User logged in successfully:", response.data);
+        const jwtToken = response.data["token"];
+        const userId = response.data["userId"];
+        localStorage.setItem("jwtToken", jwtToken);
+        localStorage.setItem("userId", userId);
+        setIsLoggedIn(true);
+      })
+      .catch((error) => {
+        console.error("Error logging user in", error);
+        console.log(user);
+      });
+
+    navigate("/dashboard");
   };
 
   return (
-    <Dialog open={true} onClose={onClose}>
-      <DialogTitle>LoginModal</DialogTitle>
+    <Dialog open={open} onClose={() => handleClose()}>
+      <DialogTitle>Login</DialogTitle>
       <DialogContent>
         <TextField
           label="Username"
@@ -41,31 +69,13 @@ const LoginModal = ({ open, onLogin, onClose }) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <TextField
-          label="Firstname"
-          type="firstname"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={firstname}
-          onChange={(e) => setFirstname(e.target.value)}
-        />
-        <TextField
-          label="Lastname"
-          type="lastname"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={lastname}
-          onChange={(e) => setLastname(e.target.value)}
-        />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
+        <Button onClick={() => handleClose()} color="secondary">
           Cancel
         </Button>
-        <Button onClick={handleLogin} color="primary">
-          LoginModal
+        <Button onClick={() => handleLogin()} color="primary">
+          Login
         </Button>
       </DialogActions>
     </Dialog>

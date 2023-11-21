@@ -1,10 +1,8 @@
 package com.smartbear.todo.controller.auth;
 
+import com.smartbear.todo.DTO.user.UserDTO;
 import com.smartbear.todo.service.auth.AuthenticationService;
-import com.smartbear.todo.util.auth.AuthenticationRequest;
 import com.smartbear.todo.util.auth.AuthenticationResponse;
-import com.smartbear.todo.util.auth.RegisterRequest;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,15 +19,15 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request
+            @RequestBody UserDTO userDTO
     ) {
-        return ResponseEntity.ok(service.register(request));
+        return ResponseEntity.ok(service.register(userDTO));
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> response(
-            @RequestBody AuthenticationRequest request
+            @RequestBody UserDTO userDTO
     ) {
-        return ResponseEntity.ok(service.authenticate(request));
+        return ResponseEntity.ok(service.authenticate(userDTO));
     }
 }

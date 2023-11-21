@@ -14,8 +14,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import CircularProgressWithLabel from "../CircularProgressWithLabel";
-import TaskList from "../TaskList";
+import CircularProgressWithLabel from "./CircularProgressWithLabel";
+import TaskList from "./TaskList";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -25,8 +25,10 @@ import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
+import SyncIcon from "@mui/icons-material/Sync";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-import LoginModal from "../LoginModal";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -81,7 +83,7 @@ const darkTheme = createTheme({
   // },
 });
 
-export default function Dashboard() {
+export default function Dashboard({ isLoggedIn, setIsLoggedIn }) {
   const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -92,28 +94,12 @@ export default function Dashboard() {
   // const [dayTasksDoneCount, setDayTasksDoneCount] = useState();
   // const [dayTasksCount, setDayTasksCount] = useState();
   const [calendarValue, setCalendarValue] = useState(dayjs());
-  const [isLoggedIn, setIsLoggedIn] = useState(/* Check user's login status */);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [refetchTasks, setRefetchTasks] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
     setIsLoggedIn(false);
-  };
-
-  const jwtToken = 123;
-
-  const handleLogin = (email, password, firstname, lastname) => {
-    // Implement your login logic
-    setIsLoggedIn(true);
-    localStorage.setItem("jwtToken", jwtToken);
-  };
-
-  const handleRegister = () => {
-    // Implement your registration logic
-    setIsLoggedIn(true);
-    setIsRegisterModalOpen(false);
-    localStorage.setItem("jwtToken", jwtToken);
   };
 
   return (
@@ -171,24 +157,55 @@ export default function Dashboard() {
               </Toolbar>
               <Divider />
               <List component="nav">
-                <ListItemButton
-                  onClick={() => {
-                    setIsLoginModalOpen(true);
-                  }}
-                >
-                  <ListItemIcon>
-                    <LoginIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Login" />
-                </ListItemButton>
+                {!isLoggedIn ? (
+                  <div>
+                    <ListItemButton
+                      onClick={() => {
+                        navigate("/login");
+                      }}
+                    >
+                      <ListItemIcon>
+                        <LoginIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Login" />
+                    </ListItemButton>
 
-                <ListItemButton>
-                  <ListItemIcon>
-                    <AppRegistrationIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Register" />
-                </ListItemButton>
+                    <ListItemButton
+                      onClick={() => {
+                        navigate("/register");
+                      }}
+                    >
+                      <ListItemIcon>
+                        <AppRegistrationIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Register" />
+                    </ListItemButton>
+                  </div>
+                ) : (
+                  <div>
+                    <ListItemButton
+                      onClick={() => {
+                        handleLogout();
+                      }}
+                    >
+                      <ListItemIcon>
+                        <LogoutIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Logout" />
+                    </ListItemButton>
 
+                    <ListItemButton
+                      onClick={() => {
+                        setRefetchTasks(true);
+                      }}
+                    >
+                      <ListItemIcon>
+                        <SyncIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Fetch tasks" />
+                    </ListItemButton>
+                  </div>
+                )}
                 <ListItemButton>
                   <ListItemIcon>
                     <DashboardIcon />
@@ -213,17 +230,15 @@ export default function Dashboard() {
                 flexDirection: "column",
               }}
             >
-              <LoginModal
-                open={isLoginModalOpen}
-                onClose={() => setIsLoginModalOpen(false)}
-                onLogin={handleLogin}
-              />
               <Box sx={{ display: "flex", flexGrow: 1, height: "700px" }}>
                 {/* Task List Component */}
                 <Box sx={{ flexGrow: 1, padding: "16px", marginTop: "50px" }}>
                   <TaskList
                     calendarValue={calendarValue}
                     setCalendarValue={setCalendarValue}
+                    isLoggedIn={isLoggedIn}
+                    refetchTasks={refetchTasks}
+                    setRefetchTasks={setRefetchTasks}
                   />
                 </Box>
 

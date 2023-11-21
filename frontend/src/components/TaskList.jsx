@@ -22,35 +22,50 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dayjs from "dayjs";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
-import TaskService from "../services/task-data-service";
+import createTaskService from "../services/TaskService";
 
-const TaskList = ({ calendarValue }) => {
+const TaskList = ({
+  calendarValue,
+  isLoggedIn,
+  refetchTasks,
+  setRefetchTasks,
+}) => {
   const [tasks, setTasks] = useState([]);
-  const [selectedPriority, setSelectedPriority] = useState("All");
+  const [selectedFilterPriority, setSelectedFilterPriority] = useState("All");
   const [openDialog, setOpenDialog] = useState(false);
+  const [newTaskPriority, setNewTaskPriority] = useState("Low");
   const [newTaskName, setNewTaskName] = useState("");
   const [newTaskDate, setNewTaskDate] = useState(calendarValue);
-
-  const taskService = new TaskService();
-
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+  const [token, setToken] = useState();
 
   useEffect(() => {
     setNewTaskDate(calendarValue);
   }, [calendarValue]);
 
+  useEffect(() => {
+    setToken(localStorage.getItem("jwtToken"));
+    fetchTasks();
+    setRefetchTasks(false);
+  }, [refetchTasks, setRefetchTasks]);
+
   const fetchTasks = () => {
-    taskService
-      .getTasks()
-      .then((response) => {
-        setTasks(response.data);
-        console.log("Getting tasks successful", response.data);
-      })
-      .catch((error) => {
-        console.error("Failed getting tasks", error);
-      });
+    if (token) {
+      console.log("Fetching data with token: " + token);
+      const taskService = createTaskService(token);
+
+      taskService
+        .getTasks()
+        .then((response) => {
+          setTasks(response.data);
+          console.log("Getting tasks successful", response);
+        })
+        .catch((error) => {
+          setTasks([]);
+          console.error("Failed getting tasks", error);
+        });
+    } else {
+      console.log("Missing token...");
+    }
   };
 
   const filterTasksByPriorityAndDate = () => {
@@ -58,18 +73,18 @@ const TaskList = ({ calendarValue }) => {
       dayjs(task.dueDate).isSame(formatDate(calendarValue), "day")
     );
 
-    if (selectedPriority === "All") {
+    if (selectedFilterPriority === "All") {
       return tasks;
     }
 
-    if (selectedPriority === "AllForTheDay") {
+    if (selectedFilterPriority === "AllForTheDay") {
       return tasksFilteredByDate;
     }
 
     console.log("filtered tasks by date:", calendarValue);
 
     const filteredTasks = tasksFilteredByDate.filter(
-      (task) => task.priority === selectedPriority
+      (task) => task.priority === selectedFilterPriority
     );
 
     console.log("Filtered tasks:", filteredTasks);
@@ -92,8 +107,9 @@ const TaskList = ({ calendarValue }) => {
   };
 
   const handleUpdateCompletion = (task) => {
-    if (task) {
+    if (task && token) {
       task.completed = !task.completed;
+      const taskService = createTaskService(token);
 
       taskService
         .updateTask(task)
@@ -108,13 +124,16 @@ const TaskList = ({ calendarValue }) => {
           console.error("Failed updating task completion", error);
         });
     } else {
-      console.error("Error with task passed to task completion update");
+      console.error(
+        "Error with task passed to task completion update / missing token"
+      );
     }
   };
 
   const handleUpdateTaskDate = (task, date) => {
-    if (task) {
+    if (task && token) {
       task.dueDate = date;
+      const taskService = createTaskService(token);
 
       taskService
         .updateTask(task)
@@ -128,59 +147,77 @@ const TaskList = ({ calendarValue }) => {
   };
 
   const handleUpdatePriority = (task, priority) => {
-    if (task) {
+    console.log("prio " + priority);
+    if (task && token) {
       task.priority = priority;
+      const taskService = createTaskService(token);
+      console.log(task);
       taskService
         .updateTask(task)
         .then((response) => {
           console.log("Updated task priority", response.data);
+          const alteredTask = tasks.map((item) =>
+            item.id === response.data.id ? response.data : item
+          );
+          setTasks(alteredTask);
         })
         .catch((error) => {
           console.error("Failed updating task priority", error);
         });
     } else {
-      console.error("Error with task passed to task priority update");
+      console.error(
+        "Error with task passed to task priority update / missing token"
+      );
     }
   };
 
   const handleAddTask = () => {
-    const newTask = {
-      title: newTaskName,
-      description: "nowy task",
-      priority: selectedPriority,
-      dueDate: newTaskDate,
-      completed: false,
-    };
+    if (token) {
+      const newTask = {
+        title: newTaskName,
+        priority: newTaskPriority,
+        dueDate: newTaskDate,
+        completed: false,
+      };
 
-    taskService
-      .addTask(newTask)
-      .then((response) => {
-        console.log("Task added successfully:", response.data);
-        setTasks((prevTasks) => [...prevTasks, response.data]);
-      })
-      .catch((error) => {
-        console.error("Error adding task:", error);
-      });
+      const taskService = createTaskService(token);
 
-    // setTasks((prevTasks) => [...prevTasks, newTask]);
-    setNewTaskName(""); // Clear input after adding task
-    setSelectedPriority("Low"); // Reset priority
-    setNewTaskDate(dayjs()); // Reset date
-    handleCloseDialog();
+      taskService
+        .addTask(newTask)
+        .then((response) => {
+          console.log("Task added successfully:", response.data);
+          setTasks((prevTasks) => [...prevTasks, response.data]);
+        })
+        .catch((error) => {
+          console.error("Error adding task:", error);
+        });
+
+      // setTasks((prevTasks) => [...prevTasks, newTask]);
+      setNewTaskName("");
+      setNewTaskPriority("Low");
+      setNewTaskDate(dayjs());
+      handleCloseDialog();
+    }
   };
 
   const handleRemoveTask = (task) => {
-    const newList = tasks.filter((item) => item.id !== task.id);
-    setTasks(newList);
+    if (token) {
+      const taskService = createTaskService(token);
 
-    taskService
-      .deleteTaskById(task.id)
-      .then((response) => {
-        console.log("Task deleted successfully", response.data);
-      })
-      .catch((error) => {
-        console.error("Failed task deletion", error);
-      });
+      taskService
+        .deleteTaskById(task.id)
+        .then((response) => {
+          console.log("Task deleted successfully", response.data);
+          const newList = tasks.filter((item) => item.id !== task.id);
+          setTasks(newList);
+        })
+        .catch((error) => {
+          console.error("Failed task deletion", error);
+        });
+    } else {
+      console.log("Missing token...");
+      return null;
+    }
   };
 
   return (
@@ -196,9 +233,9 @@ const TaskList = ({ calendarValue }) => {
         <FormControl sx={{ marginBottom: 2 }}>
           <InputLabel htmlFor="filter">Filter</InputLabel>
           <Select
-            value={selectedPriority}
+            value={selectedFilterPriority}
             label="Filter by Priority"
-            onChange={(e) => setSelectedPriority(e.target.value)}
+            onChange={(e) => setSelectedFilterPriority(e.target.value)}
           >
             <MenuItem value="All">All</MenuItem>
             <MenuItem value="AllForTheDay">All for the day </MenuItem>
@@ -328,9 +365,9 @@ const TaskList = ({ calendarValue }) => {
             >
               <InputLabel htmlFor="new-task-priority">Priority</InputLabel>
               <Select
-                value={selectedPriority}
+                value={newTaskPriority}
                 label="Priority"
-                onChange={(e) => setSelectedPriority(e.target.value)}
+                onChange={(e) => setNewTaskPriority(e.target.value)}
               >
                 <MenuItem value="Low">Low</MenuItem>
                 <MenuItem value="Medium">Medium</MenuItem>

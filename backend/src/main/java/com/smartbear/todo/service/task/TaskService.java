@@ -1,6 +1,7 @@
 package com.smartbear.todo.service.task;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.smartbear.todo.DAO.user.UserDao;
 import com.smartbear.todo.DTO.task.TaskDTO;
 import com.smartbear.todo.entity.task.Task;
 import com.smartbear.todo.repository.task.TaskRepository;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,16 +19,20 @@ import java.util.stream.Collectors;
 public class TaskService {
     private final TaskRepository repository;
     private final ObjectMapper objectMapper;
+    private final UserDao userDao;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public TaskService(TaskRepository repository, ObjectMapper objectMapper) {
+    public TaskService(TaskRepository repository, ObjectMapper objectMapper, UserDao userDao) {
         this.repository = repository;
         this.objectMapper = objectMapper;
+        this.userDao = userDao;
     }
 
     public TaskDTO saveTask(TaskDTO taskDTO) {
+        var user = userDao.getCurrentUser();
         Task taskEntity = convertDtoToEntity(taskDTO);
+        taskEntity.setUser(user);
         return convertEntityToDto(repository.save(taskEntity));
     }
 
@@ -39,14 +45,11 @@ public class TaskService {
     }
 
     public List<TaskDTO> getTasks() {
-        return repository.findAll()
+        var user = userDao.getCurrentUser();
+        return repository.findByUser_Id(user.getId())
                 .stream()
                 .map(this::convertEntityToDto)
                 .collect(Collectors.toList());
-    }
-
-    public TaskDTO getTaskByTitle(String title) {
-        return convertEntityToDto(repository.findByTitle(title));
     }
 
     public TaskDTO getTaskById(Long id) {
@@ -71,16 +74,16 @@ public class TaskService {
 
     public TaskDTO updateTask(TaskDTO taskDTO) {
         Task existingTask = repository.findById(convertDtoToEntity(taskDTO).getId()).orElse(null);
-
+        System.out.println(existingTask);
         if (existingTask == null) {
             System.out.println("Could not find given task to delete");
             return null;
         }
 
         existingTask.setTitle(taskDTO.getTitle());
-        existingTask.setDescription(taskDTO.getDescription());
         existingTask.setCompleted(taskDTO.isCompleted());
         existingTask.setDueDate(taskDTO.getDueDate());
+        existingTask.setPriority(taskDTO.getPriority());
 
         return convertEntityToDto(repository.save(existingTask));
     }
