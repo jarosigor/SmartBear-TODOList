@@ -1,6 +1,6 @@
-package com.smartbear.todo.repository.task;
+package com.smartbear.todo.repository;
 
-import com.smartbear.todo.entity.task.Task;
+import com.smartbear.todo.entity.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

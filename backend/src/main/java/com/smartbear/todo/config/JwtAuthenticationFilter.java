@@ -1,6 +1,6 @@
 package com.smartbear.todo.config;
 
-import com.smartbear.todo.service.jwt.JwtService;
+import com.smartbear.todo.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

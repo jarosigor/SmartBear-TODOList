@@ -1,17 +1,17 @@
-package com.smartbear.todo.service.task;
+package com.smartbear.todo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartbear.todo.DAO.user.UserDao;
-import com.smartbear.todo.DTO.task.TaskDTO;
-import com.smartbear.todo.entity.task.Task;
-import com.smartbear.todo.repository.task.TaskRepository;
+import com.smartbear.todo.DTO.TaskDTO;
+import com.smartbear.todo.entity.Task;
+import com.smartbear.todo.repository.TaskRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,13 +20,15 @@ public class TaskService {
     private final TaskRepository repository;
     private final ObjectMapper objectMapper;
     private final UserDao userDao;
+    private final EmailService emailService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public TaskService(TaskRepository repository, ObjectMapper objectMapper, UserDao userDao) {
+    public TaskService(TaskRepository repository, ObjectMapper objectMapper, UserDao userDao, EmailService emailService) {
         this.repository = repository;
         this.objectMapper = objectMapper;
         this.userDao = userDao;
+        this.emailService = emailService;
     }
 
     public TaskDTO saveTask(TaskDTO taskDTO) {
@@ -76,7 +78,7 @@ public class TaskService {
         Task existingTask = repository.findById(convertDtoToEntity(taskDTO).getId()).orElse(null);
         System.out.println(existingTask);
         if (existingTask == null) {
-            System.out.println("Could not find given task to delete");
+            logger.error("Could not find given task to delete");
             return null;
         }
 
@@ -86,6 +88,24 @@ public class TaskService {
         existingTask.setPriority(taskDTO.getPriority());
 
         return convertEntityToDto(repository.save(existingTask));
+    }
+
+    @Scheduled(cron = "0 0 7 * * ?")
+    public void sendScheduledEmail() {
+        var tasks = getTasks();
+        StringBuilder body = new StringBuilder();
+        body.append("Dear User,\n\n");
+        body.append("Here are your tasks for today:\n");
+
+        for (int i = 0; i < tasks.size(); i++) {
+            body.append(String.format("%d. %s\n", i + 1, tasks.get(i)));
+        }
+
+        body.append("\n\nBest regards,\nYour Task Reminder");
+        String scheduledEmailTo = "igor.jarosz@smartbear.com";
+        String scheduledSubject = "Tasks Reminder";
+        logger.info("Sending email to: " + scheduledEmailTo);
+        emailService.sendEmail(scheduledEmailTo, scheduledSubject, body.toString());
     }
 
     public TaskDTO convertEntityToDto(Task taskEntity) {

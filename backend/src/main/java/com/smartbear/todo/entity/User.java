@@ -1,5 +1,6 @@
-package com.smartbear.todo.entity.user;
+package com.smartbear.todo.entity;
 
+import com.smartbear.todo.entity.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

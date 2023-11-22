@@ -1,4 +1,4 @@
-package com.smartbear.todo.entity.user;
+package com.smartbear.todo.entity;
 
 public enum Role {
 

@@ -1,9 +1,9 @@
-package com.smartbear.todo.service.user;
+package com.smartbear.todo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.smartbear.todo.DTO.user.UserDTO;
-import com.smartbear.todo.entity.user.User;
-import com.smartbear.todo.repository.user.UserRepository;
+import com.smartbear.todo.DTO.UserDTO;
+import com.smartbear.todo.entity.User;
+import com.smartbear.todo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

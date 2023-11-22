@@ -1,6 +1,6 @@
-package com.smartbear.todo.repository.user;
+package com.smartbear.todo.repository;
 
-import com.smartbear.todo.entity.user.User;
+import com.smartbear.todo.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

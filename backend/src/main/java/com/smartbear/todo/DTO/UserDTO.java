@@ -1,6 +1,6 @@
-package com.smartbear.todo.DTO.user;
+package com.smartbear.todo.DTO;
 
-import com.smartbear.todo.entity.user.Role;
+import com.smartbear.todo.entity.Role;
 import lombok.*;
 
 @Data

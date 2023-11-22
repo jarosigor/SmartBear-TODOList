@@ -1,13 +1,11 @@
-package com.smartbear.todo.DTO.task;
+package com.smartbear.todo.DTO;
 
-import com.smartbear.todo.DTO.user.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-
 @Data
 @Builder
 @AllArgsConstructor

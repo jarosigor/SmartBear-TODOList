@@ -1,4 +1,4 @@
-package com.smartbear.todo.service.jwt;
+package com.smartbear.todo.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -18,8 +18,14 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    @Value("${SECRET_KEY}")
-    private String SECRET_KEY;
+    @Value("${spring.security.jwt.secret-key}")
+    private String secretKey;
+
+    @Value("${spring.security.jwt.expiration}")
+    private Long jwtExpiration;
+
+    @Value("${spring.security.jwt.refresh-token.expiration}")
+    private Long refreshExpiration;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -51,6 +57,20 @@ public class JwtService {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
+        return buildToken(extraClaims, userDetails, jwtExpiration);
+    }
+
+    public String generateRefreshToken(
+            UserDetails userDetails
+    ) {
+        return buildToken(new HashMap<>(), userDetails, refreshExpiration);
+    }
+
+    public String buildToken(
+            Map<String, Object> extraClaims,
+            UserDetails userDetails,
+            Long jwtExpiration
+    ) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
@@ -72,7 +92,7 @@ public class JwtService {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

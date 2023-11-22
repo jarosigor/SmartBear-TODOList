@@ -1,7 +1,7 @@
 package com.smartbear.todo.DAO.user;
 
-import com.smartbear.todo.entity.user.User;
-import com.smartbear.todo.repository.user.UserRepository;
+import com.smartbear.todo.entity.User;
+import com.smartbear.todo.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 

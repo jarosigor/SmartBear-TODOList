@@ -1,4 +1,4 @@
-package com.smartbear.todo.util.auth;
+package com.smartbear.todo.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationResponse {
-
-    private String token;
-    private Long userId;
+    private String refreshToken;
+    private String accessToken;
 }

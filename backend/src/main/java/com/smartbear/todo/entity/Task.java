@@ -1,9 +1,7 @@
-package com.smartbear.todo.entity.task;
+package com.smartbear.todo.entity;
 
-import com.smartbear.todo.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;

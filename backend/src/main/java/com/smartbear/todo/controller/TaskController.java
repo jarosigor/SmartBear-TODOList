@@ -1,7 +1,7 @@
-package com.smartbear.todo.controller.task;
+package com.smartbear.todo.controller;
 
-import com.smartbear.todo.DTO.task.TaskDTO;
-import com.smartbear.todo.service.task.TaskService;
+import com.smartbear.todo.DTO.TaskDTO;
+import com.smartbear.todo.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@RequestMapping("/")
+@RequestMapping("")
 @RestController
 public class TaskController {
 
