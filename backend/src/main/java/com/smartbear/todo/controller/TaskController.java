@@ -2,6 +2,7 @@ package com.smartbear.todo.controller;
 
 import com.smartbear.todo.DTO.TaskDTO;
 import com.smartbear.todo.service.TaskService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +13,10 @@ import java.util.List;
 
 @RequestMapping("")
 @RestController
+@RequiredArgsConstructor
 public class TaskController {
 
     private final TaskService service;
-
-    @Autowired
-    public TaskController(TaskService service) {
-        this.service = service;
-    }
 
     @PostMapping("/add-task")
     public ResponseEntity<TaskDTO> addTask(@RequestBody TaskDTO task) {
