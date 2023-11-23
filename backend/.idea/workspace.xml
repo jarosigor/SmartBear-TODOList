@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="96fd2926-e3b0-4dff-a26a-bd4cc0310bb3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/src/components/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/Dashboard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/components/TaskList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/TaskList.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

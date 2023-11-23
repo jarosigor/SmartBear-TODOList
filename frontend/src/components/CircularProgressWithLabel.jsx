@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import dayjs from "dayjs";
 
-function CircularProgressWithLabel(props, { tasksStats, calendarValue }) {
+function CircularProgressWithLabel(props, { tasksStats, calendarValue, type }) {
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>
       <CircularProgress
@@ -14,6 +14,7 @@ function CircularProgressWithLabel(props, { tasksStats, calendarValue }) {
         {...props}
         tasksStats={tasksStats}
         calendarValue={calendarValue}
+        type={type}
       />
       <Box
         sx={{
@@ -50,10 +51,18 @@ CircularProgressWithLabel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export default function CircularWithValueLabel({ tasksStats, calendarValue }) {
+export default function CircularWithValueLabel({
+  tasksStats,
+  calendarValue,
+  type,
+}) {
   const [progress, setProgress] = React.useState(0);
   React.useEffect(() => {
-    setProgress(tasksStats["dayStats"]);
+    if (type === "Day") {
+      setProgress(tasksStats["dayStats"]);
+    } else {
+      setProgress(tasksStats["allStats"]);
+    }
   }, [tasksStats, calendarValue]);
 
   return <CircularProgressWithLabel value={progress} />;

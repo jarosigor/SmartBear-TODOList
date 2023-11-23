@@ -281,24 +281,73 @@ export default function Dashboard({ isLoggedIn, setIsLoggedIn }) {
               </Box>
 
               {/* Progress Bar Component */}
-              <Box sx={{ border: "1px solid #ccc", padding: "16px" }}>
-                <CircularProgressWithLabel
-                  tasks={tasks}
-                  tasksStats={tasksStats}
-                  setTasksStats={setTasksStats}
-                  calendarValue={calendarValue}
-                />
-                {calendarValue && (
+              <Box
+                sx={{
+                  border: "1px solid #ccc",
+                  padding: "16px",
+                  display: "flex",
+                  flexDirection: "row", // Arrange items horizontally
+                  alignItems: "center",
+                  justifyContent: "center", // Center items horizontally
+                  textAlign: "center",
+                }}
+              >
+                <Box
+                  sx={{
+                    border: "1px",
+                    padding: "16px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    textAlign: "center",
+                  }}
+                >
+                  <CircularProgressWithLabel
+                    tasks={tasks}
+                    tasksStats={tasksStats}
+                    setTasksStats={setTasksStats}
+                    calendarValue={calendarValue}
+                    type={"Day"}
+                  />
+                  {calendarValue && (
+                    <Typography
+                      variant="h5"
+                      component="div"
+                      color="text.secondary"
+                      fontWeight="bold"
+                      style={{ marginBottom: "8px" }}
+                    >
+                      {dayjs(calendarValue).format("DD MMMM YYYY")}
+                    </Typography>
+                  )}
+                </Box>
+                <Box
+                  sx={{
+                    border: "1px",
+                    padding: "16px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    textAlign: "center",
+                  }}
+                >
+                  <CircularProgressWithLabel
+                    tasks={tasks}
+                    tasksStats={tasksStats}
+                    setTasksStats={setTasksStats}
+                    calendarValue={calendarValue}
+                    type={"All"}
+                  />
                   <Typography
                     variant="h5"
                     component="div"
                     color="text.secondary"
-                    fontWeight="bold" // Adjust the font weight for emphasis
+                    fontWeight="bold"
                     style={{ marginBottom: "8px" }}
                   >
-                    {dayjs(calendarValue).format("DD MMMM YYYY")}
+                    All Tasks
                   </Typography>
-                )}
+                </Box>
               </Box>
             </Box>
           </Box>
