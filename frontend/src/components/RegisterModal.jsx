@@ -34,16 +34,17 @@ const RegisterModal = ({ setIsLoggedIn }) => {
       .registerUser(newUser)
       .then((response) => {
         console.log("User registered successfully:", response.data);
-        const jwtToken = response.data["token"];
-        const userId = response.data["userId"];
-        localStorage.setItem("jwtToken", jwtToken);
-        localStorage.setItem("userId", userId);
+        const accessToken = response.data["accessToken"];
+        const refreshToken = response.data["refreshToken"];
+        localStorage.setItem("jwtToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        console.log(localStorage.getItem("jwtToken"));
         setIsLoggedIn(true);
-        navigate("/dashboard");
       })
       .catch((error) => {
         console.error("Error registering user:", error);
       });
+    navigate("/dashboard");
   };
 
   const handleClose = () => {

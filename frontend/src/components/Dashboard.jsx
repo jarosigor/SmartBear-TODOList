@@ -29,6 +29,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import SyncIcon from "@mui/icons-material/Sync";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import { useNavigate } from "react-router-dom";
+import AuthService from "../services/AuthService";
+import createAuthService from "../services/AuthService";
 
 const drawerWidth = 240;
 
@@ -98,8 +100,18 @@ export default function Dashboard({ isLoggedIn, setIsLoggedIn }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("jwtToken");
-    setIsLoggedIn(false);
+    const authService = createAuthService();
+
+    authService
+      .logoutUser()
+      .then((response) => {
+        console.log("Logged out successfully", response.data);
+        localStorage.removeItem("jwtToken");
+        setIsLoggedIn(false);
+      })
+      .catch((error) => {
+        console.error("Error logging out user", error);
+      });
   };
 
   return (

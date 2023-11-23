@@ -5,6 +5,7 @@ import com.smartbear.todo.DAO.user.UserDao;
 import com.smartbear.todo.DTO.TaskDTO;
 import com.smartbear.todo.entity.Task;
 import com.smartbear.todo.repository.TaskRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +17,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class TaskService {
     private final TaskRepository repository;
     private final ObjectMapper objectMapper;
     private final UserDao userDao;
     private final EmailService emailService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    public TaskService(TaskRepository repository, ObjectMapper objectMapper, UserDao userDao, EmailService emailService) {
-        this.repository = repository;
-        this.objectMapper = objectMapper;
-        this.userDao = userDao;
-        this.emailService = emailService;
-    }
 
     public TaskDTO saveTask(TaskDTO taskDTO) {
         var user = userDao.getCurrentUser();

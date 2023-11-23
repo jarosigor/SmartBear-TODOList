@@ -1,10 +1,15 @@
 import axios from "axios";
 
-const createTaskService = (token) => {
+const createTaskService = () => {
+  const getAccessToken = () => {
+    return localStorage.getItem("jwtToken");
+  };
+
   const axiosInstance = axios.create({
     baseURL: "http://localhost:8080",
+
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${getAccessToken()}`,
       "Content-Type": "application/json",
     },
   });
@@ -18,6 +23,7 @@ const createTaskService = (token) => {
   };
 
   const getTasks = () => {
+    console.log(getAccessToken());
     return axiosInstance.get(`/tasks`);
   };
 
@@ -45,6 +51,7 @@ const createTaskService = (token) => {
     getTasksByDate,
     deleteTaskById,
     updateTask,
+    getAccessToken,
   };
 };
 

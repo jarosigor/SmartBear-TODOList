@@ -12,13 +12,23 @@ const createAuthService = () => {
     return axiosInstance.post("/authenticate", user);
   };
 
+  const logoutUser = () => {
+    return axiosInstance.post("/logout");
+  };
+
   const registerUser = (user) => {
     return axiosInstance.post("/register", user);
   };
 
+  const refreshToken = () => {
+    return axiosInstance.post("/refresh-token");
+  };
+
   return {
     loginUser,
+    logoutUser,
     registerUser,
+    refreshToken,
   };
 };
 

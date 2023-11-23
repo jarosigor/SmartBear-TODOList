@@ -34,10 +34,11 @@ const LoginModal = ({ setIsLoggedIn }) => {
       .loginUser(user)
       .then((response) => {
         console.log("User logged in successfully:", response.data);
-        const jwtToken = response.data["token"];
-        const userId = response.data["userId"];
+        const jwtToken = response.data["accessToken"];
+        const refreshToken = response.data["refreshToken"];
         localStorage.setItem("jwtToken", jwtToken);
-        localStorage.setItem("userId", userId);
+        localStorage.setItem("refreshToken", refreshToken);
+        console.log(localStorage.getItem("jwtToken"));
         setIsLoggedIn(true);
       })
       .catch((error) => {

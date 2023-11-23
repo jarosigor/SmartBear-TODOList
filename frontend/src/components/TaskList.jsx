@@ -36,22 +36,21 @@ const TaskList = ({
   const [newTaskPriority, setNewTaskPriority] = useState("Low");
   const [newTaskName, setNewTaskName] = useState("");
   const [newTaskDate, setNewTaskDate] = useState(calendarValue);
-  const [token, setToken] = useState();
 
   useEffect(() => {
     setNewTaskDate(calendarValue);
   }, [calendarValue]);
 
   useEffect(() => {
-    setToken(localStorage.getItem("jwtToken"));
     fetchTasks();
     setRefetchTasks(false);
   }, [refetchTasks, setRefetchTasks]);
 
   const fetchTasks = () => {
+    const taskService = createTaskService();
+    const token = taskService.getAccessToken();
     if (token) {
       console.log("Fetching data with token: " + token);
-      const taskService = createTaskService(token);
 
       taskService
         .getTasks()
@@ -107,9 +106,11 @@ const TaskList = ({
   };
 
   const handleUpdateCompletion = (task) => {
+    const taskService = createTaskService();
+    const token = taskService.getAccessToken();
+
     if (task && token) {
       task.completed = !task.completed;
-      const taskService = createTaskService(token);
 
       taskService
         .updateTask(task)
@@ -131,9 +132,11 @@ const TaskList = ({
   };
 
   const handleUpdateTaskDate = (task, date) => {
+    const taskService = createTaskService();
+    const token = taskService.getAccessToken();
+
     if (task && token) {
       task.dueDate = date;
-      const taskService = createTaskService(token);
 
       taskService
         .updateTask(task)
@@ -147,10 +150,11 @@ const TaskList = ({
   };
 
   const handleUpdatePriority = (task, priority) => {
-    console.log("prio " + priority);
+    const taskService = createTaskService();
+    const token = taskService.getAccessToken();
+
     if (task && token) {
       task.priority = priority;
-      const taskService = createTaskService(token);
       console.log(task);
       taskService
         .updateTask(task)
@@ -172,6 +176,9 @@ const TaskList = ({
   };
 
   const handleAddTask = () => {
+    const taskService = createTaskService();
+    const token = taskService.getAccessToken();
+
     if (token) {
       const newTask = {
         title: newTaskName,
@@ -179,8 +186,6 @@ const TaskList = ({
         dueDate: newTaskDate,
         completed: false,
       };
-
-      const taskService = createTaskService(token);
 
       taskService
         .addTask(newTask)
@@ -192,7 +197,6 @@ const TaskList = ({
           console.error("Error adding task:", error);
         });
 
-      // setTasks((prevTasks) => [...prevTasks, newTask]);
       setNewTaskName("");
       setNewTaskPriority("Low");
       setNewTaskDate(dayjs());
@@ -201,9 +205,10 @@ const TaskList = ({
   };
 
   const handleRemoveTask = (task) => {
-    if (token) {
-      const taskService = createTaskService(token);
+    const taskService = createTaskService();
+    const token = taskService.getAccessToken();
 
+    if (token) {
       taskService
         .deleteTaskById(task.id)
         .then((response) => {

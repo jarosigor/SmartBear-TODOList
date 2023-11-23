@@ -17,7 +17,6 @@ public class Token {
     @GeneratedValue
     private Long id;
     private String jwtToken;
-    private String refreshToken;
 
     @Enumerated(EnumType.STRING)
     private TokenType tokenType;
@@ -29,4 +28,12 @@ public class Token {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Token(String jwtToken, TokenType tokenType, boolean expired, boolean revoked, User user) {
+        this.jwtToken = jwtToken;
+        this.tokenType = tokenType;
+        this.expired = expired;
+        this.revoked = revoked;
+        this.user = user;
+    }
 }

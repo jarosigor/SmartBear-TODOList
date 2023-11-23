@@ -34,6 +34,7 @@ public class TaskController {
 
     @GetMapping("/tasks")
     public ResponseEntity<List<TaskDTO>> getTasks() {
+        System.out.println("siema");
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.getTasks());

@@ -36,16 +36,18 @@ public class AuthenticationService {
                 )
         );
 
-        var userEntity = userRepository.findByEmail(userDTO.getEmail())
+        var user = userRepository.findByEmail(userDTO.getEmail())
                 .orElseThrow();
 
-        revokeAllUserTokens(userEntity);
-        var token = buildToken(userEntity);
-        tokenRepository.save(token);
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
 
         return AuthenticationResponse.builder()
-                .accessToken(token.getJwtToken())
-                .refreshToken(token.getRefreshToken())
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -58,14 +60,14 @@ public class AuthenticationService {
                 .role(userDTO.getRole())
                 .build();
 
-        var userEntity = userRepository.save(user);
-
-        var token = buildToken(userEntity);
-        tokenRepository.save(token);
+        var savedUser = userRepository.save(user);
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+        saveUserToken(savedUser, jwtToken);
 
         return AuthenticationResponse.builder()
-                .accessToken(token.getJwtToken())
-                .refreshToken(token.getRefreshToken())
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -88,6 +90,8 @@ public class AuthenticationService {
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
+                revokeAllUserTokens(user);
+                saveUserToken(user, accessToken);
                 var authResponse = AuthenticationResponse.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)
@@ -98,19 +102,13 @@ public class AuthenticationService {
         }
     }
 
-    private Token buildToken(User user) {
-
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-
-        return Token.builder()
-                .user(user)
-                .jwtToken(jwtToken)
-                .refreshToken(refreshToken)
-                .tokenType(TokenType.BEARER)
-                .expired(false)
-                .revoked(false)
-                .build();
+    private void saveUserToken(User user, String jwtToken) {
+        Token token = new Token(jwtToken,
+                TokenType.BEARER,
+                false,
+                false,
+                user);
+        tokenRepository.save(token);
     }
 
     public void revokeAllUserTokens(User user) {
