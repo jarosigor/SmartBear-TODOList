@@ -29,7 +29,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import SyncIcon from "@mui/icons-material/Sync";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import { useNavigate } from "react-router-dom";
-import AuthService from "../services/AuthService";
 import createAuthService from "../services/AuthService";
 
 const drawerWidth = 240;
@@ -91,12 +90,14 @@ export default function Dashboard({ isLoggedIn, setIsLoggedIn }) {
     setOpen(!open);
   };
 
-  // const [allTasksDoneCount, setAllTasksDoneCount] = useState();
-  // const [allTasksCount, setAllTasksCount] = useState();
-  // const [dayTasksDoneCount, setDayTasksDoneCount] = useState();
-  // const [dayTasksCount, setDayTasksCount] = useState();
+  const [tasksStats, setTasksStats] = useState({
+    dayStats: 0,
+    allStats: 0,
+  });
   const [calendarValue, setCalendarValue] = useState(dayjs());
   const [refetchTasks, setRefetchTasks] = useState(false);
+  const [tasks, setTasks] = useState([]);
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -107,6 +108,7 @@ export default function Dashboard({ isLoggedIn, setIsLoggedIn }) {
       .then((response) => {
         console.log("Logged out successfully", response.data);
         localStorage.removeItem("jwtToken");
+        localStorage.removeItem("refreshToken");
         setIsLoggedIn(false);
       })
       .catch((error) => {
@@ -248,9 +250,13 @@ export default function Dashboard({ isLoggedIn, setIsLoggedIn }) {
                   <TaskList
                     calendarValue={calendarValue}
                     setCalendarValue={setCalendarValue}
-                    isLoggedIn={isLoggedIn}
                     refetchTasks={refetchTasks}
                     setRefetchTasks={setRefetchTasks}
+                    tasksStats={tasksStats}
+                    setTasksStats={setTasksStats}
+                    isLoggedIn={isLoggedIn}
+                    tasks={tasks}
+                    setTasks={setTasks}
                   />
                 </Box>
 
@@ -276,7 +282,23 @@ export default function Dashboard({ isLoggedIn, setIsLoggedIn }) {
 
               {/* Progress Bar Component */}
               <Box sx={{ border: "1px solid #ccc", padding: "16px" }}>
-                <CircularProgressWithLabel />
+                <CircularProgressWithLabel
+                  tasks={tasks}
+                  tasksStats={tasksStats}
+                  setTasksStats={setTasksStats}
+                  calendarValue={calendarValue}
+                />
+                {calendarValue && (
+                  <Typography
+                    variant="h5"
+                    component="div"
+                    color="text.secondary"
+                    fontWeight="bold" // Adjust the font weight for emphasis
+                    style={{ marginBottom: "8px" }}
+                  >
+                    {dayjs(calendarValue).format("DD MMMM YYYY")}
+                  </Typography>
+                )}
               </Box>
             </Box>
           </Box>

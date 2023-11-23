@@ -26,11 +26,14 @@ import createTaskService from "../services/TaskService";
 
 const TaskList = ({
   calendarValue,
-  isLoggedIn,
   refetchTasks,
   setRefetchTasks,
+  tasksStats,
+  setTasksStats,
+  isLoggedIn,
+  tasks,
+  setTasks,
 }) => {
-  const [tasks, setTasks] = useState([]);
   const [selectedFilterPriority, setSelectedFilterPriority] = useState("All");
   const [openDialog, setOpenDialog] = useState(false);
   const [newTaskPriority, setNewTaskPriority] = useState("Low");
@@ -38,8 +41,21 @@ const TaskList = ({
   const [newTaskDate, setNewTaskDate] = useState(calendarValue);
 
   useEffect(() => {
+    if (isLoggedIn) {
+      fetchTasks();
+    } else {
+      setTasks([]);
+    }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
     setNewTaskDate(calendarValue);
+    calculateTasksStats();
   }, [calendarValue]);
+
+  useEffect(() => {
+    calculateTasksStats();
+  }, [tasks]);
 
   useEffect(() => {
     fetchTasks();
@@ -67,22 +83,58 @@ const TaskList = ({
     }
   };
 
-  const filterTasksByPriorityAndDate = () => {
-    const tasksFilteredByDate = tasks.filter((task) =>
+  const calculateTasksStats = () => {
+    let countCompletedTasks = 0;
+    let countAllCompletedTasks = 0;
+    let countTasks = 0;
+    let countAllTasks = 0;
+    const tasksFilteredByCalendarDate = filterTasksByCalendarDate();
+    console.log("STATY DLA " + formatDate(calendarValue));
+
+    tasksFilteredByCalendarDate.forEach((task) => {
+      if (task.completed) {
+        countCompletedTasks++;
+      }
+      countTasks++;
+    });
+
+    tasks.forEach((task) => {
+      if (task.completed) {
+        countAllCompletedTasks++;
+      }
+      countAllTasks++;
+    });
+    const dayStats =
+      countTasks > 0 ? (countCompletedTasks / countTasks) * 100 : 100;
+    const allStats =
+      countAllTasks > 0 ? (countAllCompletedTasks / countAllTasks) * 100 : 100;
+
+    setTasksStats({
+      dayStats: dayStats,
+      allStats: allStats,
+    });
+  };
+
+  const filterTasksByCalendarDate = () => {
+    return tasks.filter((task) =>
       dayjs(task.dueDate).isSame(formatDate(calendarValue), "day")
     );
+  };
+
+  const filterTasksByPriorityAndDate = () => {
+    const tasksFilteredByCalendarDate = filterTasksByCalendarDate();
 
     if (selectedFilterPriority === "All") {
       return tasks;
     }
 
     if (selectedFilterPriority === "AllForTheDay") {
-      return tasksFilteredByDate;
+      return tasksFilteredByCalendarDate;
     }
 
     console.log("filtered tasks by date:", calendarValue);
 
-    const filteredTasks = tasksFilteredByDate.filter(
+    const filteredTasks = tasksFilteredByCalendarDate.filter(
       (task) => task.priority === selectedFilterPriority
     );
 

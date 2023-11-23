@@ -5,18 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="96fd2926-e3b0-4dff-a26a-bd4cc0310bb3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/5da2e48c-3a3f-49d3-9651-79e0e566891c.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/5da2e48c-3a3f-49d3-9651-79e0e566891c.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/5da2e48c-3a3f-49d3-9651-79e0e566891c/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/5da2e48c-3a3f-49d3-9651-79e0e566891c/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/smartbear/todo/DTO/AuthenticationResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/smartbear/todo/DTO/AuthenticationResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/smartbear/todo/controller/TaskController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/smartbear/todo/controller/TaskController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/smartbear/todo/entity/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/smartbear/todo/entity/Token.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/smartbear/todo/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/smartbear/todo/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/smartbear/todo/service/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/smartbear/todo/service/AuthenticationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/smartbear/todo/service/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/smartbear/todo/service/JwtService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/smartbear/todo/service/TaskService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/smartbear/todo/service/TaskService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/services/AuthService.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/services/AuthService.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/services/TaskService.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/services/TaskService.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/components/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/components/TaskList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/components/TaskList.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,7 +182,7 @@
       <workItem from="1700425169811" duration="1972000" />
       <workItem from="1700460462343" duration="17013000" />
       <workItem from="1700552618588" duration="19816000" />
-      <workItem from="1700634265907" duration="42770000" />
+      <workItem from="1700634265907" duration="44354000" />
     </task>
     <servers />
   </component>

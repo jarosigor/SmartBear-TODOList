@@ -10,7 +10,7 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
-    setIsLoggedIn(!!token);
+    setIsLoggedIn(token);
   }, []);
 
   return (
