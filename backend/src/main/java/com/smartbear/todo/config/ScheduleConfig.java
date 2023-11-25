@@ -1,9 +1,4 @@
 package com.smartbear.todo.config;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-
-@Configuration
-@EnableScheduling
-public class ScheduleConfig {
+public interface ScheduleConfig {
 }

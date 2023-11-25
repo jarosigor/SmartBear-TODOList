@@ -1,4 +1,4 @@
-package com.smartbear.todo.DTO;
+package com.smartbear.todo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskDTO {
+public class TaskDto {
     private Long id;
     private String title;
     private String priority;

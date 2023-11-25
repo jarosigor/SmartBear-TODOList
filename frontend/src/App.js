@@ -4,6 +4,7 @@ import Dashboard from "./components/Dashboard";
 import { Route, Routes } from "react-router-dom";
 import LoginModal from "./components/LoginModal";
 import RegisterModal from "./components/RegisterModal";
+import ProfileModal from "./components/ProfileModal";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,11 +24,22 @@ function App() {
       />
       <Route
         path="/login"
-        element={<LoginModal setIsLoggedIn={setIsLoggedIn} />}
+        element={
+          <LoginModal isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        }
       />
       <Route
         path="/register"
-        element={<RegisterModal setIsLoggedIn={setIsLoggedIn} />}
+        element={
+          <RegisterModal
+            isLoggedIn={isLoggedIn}
+            setIsLoggedIn={setIsLoggedIn}
+          />
+        }
+      />
+      <Route
+        path="/profile"
+        element={<ProfileModal isLoggedIn={isLoggedIn} />}
       />
     </Routes>
   );

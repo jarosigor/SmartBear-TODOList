@@ -1,4 +1,4 @@
-package com.smartbear.todo.DTO;
+package com.smartbear.todo.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,6 @@
 package com.smartbear.todo.entity;
 
+import com.smartbear.todo.enums.TokenType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

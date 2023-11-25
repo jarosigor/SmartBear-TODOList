@@ -89,7 +89,6 @@ const TaskList = ({
     let countTasks = 0;
     let countAllTasks = 0;
     const tasksFilteredByCalendarDate = filterTasksByCalendarDate();
-    console.log("STATY DLA " + formatDate(calendarValue));
 
     tasksFilteredByCalendarDate.forEach((task) => {
       if (task.completed) {

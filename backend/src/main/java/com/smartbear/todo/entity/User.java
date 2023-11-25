@@ -1,6 +1,6 @@
 package com.smartbear.todo.entity;
 
-import com.smartbear.todo.entity.Role;
+import com.smartbear.todo.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,7 +39,7 @@ public class User implements UserDetails {
     private String lastname;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private UserRole role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

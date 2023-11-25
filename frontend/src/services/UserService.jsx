@@ -1,13 +1,21 @@
 import axios from "axios";
 
 const createUserDataService = (token) => {
+  const getAccessToken = () => {
+    return localStorage.getItem("jwtToken");
+  };
+
   const axiosInstance = axios.create({
     baseURL: "http://localhost:8080",
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${getAccessToken()}`,
       "Content-Type": "application/json",
     },
   });
+
+  const getUser = () => {
+    return axiosInstance.get("/user");
+  };
 
   const getUserById = (id) => {
     return axiosInstance.get(`/get-user/${id}`);
@@ -30,6 +38,7 @@ const createUserDataService = (token) => {
   };
 
   return {
+    getUser,
     getUserById,
     getUserByEmail,
     getUsers,

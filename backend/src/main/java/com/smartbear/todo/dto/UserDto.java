@@ -1,17 +1,17 @@
-package com.smartbear.todo.DTO;
+package com.smartbear.todo.dto;
 
-import com.smartbear.todo.entity.Role;
+import com.smartbear.todo.enums.UserRole;
 import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class UserDto {
     private Long id;
     private String email;
     private String password;
     private String firstname;
     private String lastname;
-    private Role role;
+    private UserRole role;
 }

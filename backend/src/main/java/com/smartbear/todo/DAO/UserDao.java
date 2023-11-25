@@ -1,4 +1,4 @@
-package com.smartbear.todo.DAO.user;
+package com.smartbear.todo.dao;
 
 import com.smartbear.todo.entity.User;
 import com.smartbear.todo.repository.UserRepository;
@@ -18,6 +18,6 @@ public class UserDao {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         return  userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("DAO sie wyjebao"));
+                .orElseThrow(() -> new RuntimeException("Dao sie wj*baao"));
     }
 }

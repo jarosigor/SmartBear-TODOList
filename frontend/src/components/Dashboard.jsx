@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -99,6 +99,12 @@ export default function Dashboard({ isLoggedIn, setIsLoggedIn }) {
   const [tasks, setTasks] = useState([]);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
+  }, [isLoggedIn]);
 
   const handleLogout = () => {
     const authService = createAuthService();
@@ -227,7 +233,7 @@ export default function Dashboard({ isLoggedIn, setIsLoggedIn }) {
                   <ListItemText primary="Dashboard" />
                 </ListItemButton>
 
-                <ListItemButton>
+                <ListItemButton onClick={() => navigate("/profile")}>
                   <ListItemIcon>
                     <PeopleIcon />
                   </ListItemIcon>

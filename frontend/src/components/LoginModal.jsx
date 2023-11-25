@@ -1,5 +1,5 @@
 // LoginModal.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Button,
@@ -11,15 +11,22 @@ import {
 import { useNavigate } from "react-router-dom";
 import createAuthService from "../services/AuthService";
 
-const LoginModal = ({ setIsLoggedIn }) => {
+const LoginModal = ({ isLoggedIn, setIsLoggedIn }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [open, setOpen] = useState(true);
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/dashboard");
+    }
+  });
+
   const handleClose = () => {
     navigate("/dashboard");
+    setOpen(false);
   };
 
   const handleLogin = () => {
@@ -40,13 +47,12 @@ const LoginModal = ({ setIsLoggedIn }) => {
         localStorage.setItem("refreshToken", refreshToken);
         console.log(localStorage.getItem("jwtToken"));
         setIsLoggedIn(true);
+        setOpen(false);
       })
       .catch((error) => {
         console.error("Error logging user in", error);
         console.log(user);
       });
-
-    navigate("/dashboard");
   };
 
   return (
@@ -72,8 +78,8 @@ const LoginModal = ({ setIsLoggedIn }) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleClose()} color="secondary">
-          Cancel
+        <Button onClick={() => navigate("/register")} color="secondary">
+          Register
         </Button>
         <Button onClick={() => handleLogin()} color="primary">
           Login

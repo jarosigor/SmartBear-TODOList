@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import dayjs from "dayjs";
 
 function CircularProgressWithLabel(props, { tasksStats, calendarValue, type }) {
   return (
@@ -63,7 +62,7 @@ export default function CircularWithValueLabel({
     } else {
       setProgress(tasksStats["allStats"]);
     }
-  }, [tasksStats, calendarValue]);
+  }, [tasksStats, calendarValue, type]);
 
   return <CircularProgressWithLabel value={progress} />;
 }

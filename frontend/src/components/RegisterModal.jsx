@@ -40,20 +40,22 @@ const RegisterModal = ({ setIsLoggedIn }) => {
         localStorage.setItem("refreshToken", refreshToken);
         console.log(localStorage.getItem("jwtToken"));
         setIsLoggedIn(true);
+        navigate("/dashboard");
+        setOpen(false);
       })
       .catch((error) => {
         console.error("Error registering user:", error);
       });
-    navigate("/dashboard");
   };
 
   const handleClose = () => {
     navigate("/dashboard");
+    setOpen(false);
   };
 
   return (
     <Dialog open={open} onClose={() => handleClose()}>
-      <DialogTitle>RegisterModal</DialogTitle>
+      <DialogTitle>Register</DialogTitle>
       <DialogContent>
         <TextField
           label="Email"
@@ -92,8 +94,8 @@ const RegisterModal = ({ setIsLoggedIn }) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleClose()} color="secondary">
-          Cancel
+        <Button onClick={() => navigate("/login")} color="secondary">
+          Login
         </Button>
         <Button onClick={() => handleRegister()} color="primary">
           Register
